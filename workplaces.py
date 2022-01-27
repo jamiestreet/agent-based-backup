@@ -4,7 +4,6 @@ import time
 class workplaces:
     def __init__(self, workplace_dist, ages, id):
         self.workplace_type = ["tiny", "small" ,"medium", "large"]
-        #workplace_dist = [0.25, 0.25, 0.25, 0.25]
         self.workplace_dist = workplace_dist
         self.ages = ages
         self.id = id
@@ -89,16 +88,3 @@ class workplaces:
                     workplaces.append(workplace)
 
         return workplaces
-
-"""nPop = 500
-workplace_dist = [0.25, 0.25, 0.25, 0.25]
-ages = np.random.choice(np.arange(101), nPop)
-id = [i for i in range(nPop)]
-
-m = workplaces(workplace_dist, ages, id)
-start = time.time()
-a = m.household_sort()
-print(a)
-print(sum([len(b) for b in a]))
-end = time.time()
-print(end - start)"""
