@@ -16,8 +16,6 @@ meeting_ave = 20
 
 days = 43
 
-s = 5
-
 yp = np.empty(len(X))
 for i in range(len(X)):
     model = abm(nPop, inf0, X[i]/100, meeting_ave)
