@@ -338,15 +338,3 @@ class households2:
 
         s = np.argmin(self.households[:, 0])
         return np.array(self.households[:s, :], dtype=np.int16)
-
-nPop = 100000
-household_dist = [0.075, 0.075, 0.14, 0.09, 0.05, 0.04, 0.0075, 0.0075, 0.0075, 0.0075, 0.0075, 0.1, 0.05, 0.05, 0.0125, 0.0125, 0.0125, 0.0125, 0.0125, 0.05, 0.02, 0.02, 0.01, 0.1, 0.03]
-poss_ages = np.arange(100)
-ages = np.random.choice(poss_ages, nPop)
-id = np.arange(nPop)
-
-house = households2(household_dist, ages, id)
-start = time.time()
-house.household_sort()
-end = time.time()
-print(end-start)
