@@ -1,6 +1,6 @@
 import numpy as np
 import time
-class households2:
+class households:
 
     def __init__(self,household_dist, ages, id):
         #household_type = ["singYA", "singA", "singOAP", "coupleYA", "coupleYA1C", "coupleYA2C", "coupleYA3C", "couple4YAC", "singPYA1C", "singPYA2C", "singPYA3C", "coupleA", "coupleA1C", "coupleA2C", "coupleA3C", "couple4AC", "singPA1C", "singPA2C", "singPA3C", "coupleA1YA", "coupleA2YA", "singPA1YA", "singPA2YA", "coupleOAP", "unrelYA"]
