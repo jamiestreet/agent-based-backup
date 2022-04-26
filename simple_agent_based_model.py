@@ -4,78 +4,78 @@ from matplotlib import pyplot as plt
 
 class abm:
     def __init__(self, nPop, inf0, TransmProb, meeting_ave):
-        self.nPop = nPop
-        self.inf0 = inf0
-        self.TransmProb = TransmProb
-        self.meeting_ave = meeting_ave
-        self.time = 0
-        self.susc = []
-        self.exp = []
-        self.inf = []
-        self.rec = []
-        self.asy = []
-        self.sym = []
+        self.nPop = nPop                # population size
+        self.inf0 = inf0                # number of infected agents at time 0
+        self.TransmProb = TransmProb    # transmission probability
+        self.meeting_ave = meeting_ave  # average number of meetings per day   
+        self.time = 0                   # define time variable
+        self.susc = []                  # define susceptible agents       
+        self.exp = []                   # define exposed agents
+        self.inf = []                   # define infected agents
+        self.rec = []                   # define recovered agents
+        self.asy = []                   # define asymptomatic agents
+        self.sym = []                   # define symptomatic agents
 
-    def start_inf(self, i):
+    def start_inf(self, i):             # function to infect inf0 individuals at time 0
         self.states[i] = 2
         self.infectiousLen[i] = 0  
         self.infectiousTime[i] = ceil(np.random.lognormal(1.501524205, 0.07145896398))
  
-    def infInit(self):
+    def infInit(self):                  # function to randomly select time 0 infected individuals
         infs = np.random.randint(0, self.nPop, self.inf0)
         for i in infs:
             self.start_inf(i)
 
-    def create_pop(self):
-        self.id = [i for i in range(self.nPop)]
-        self.states = [0 for i in range(self.nPop)]
-        self.latencyTime = [-1 for i in range(self.nPop)]
-        self.infectiousTime = [-1 for i in range(self.nPop)]
-        self.latencyLen = [-1 for i in range(self.nPop)]
-        self.infectiousLen = [-1 for i in range(self.nPop)]
-        self.mixersAvi = [ [x for x in range(self.nPop) if x != i] for i in range(self.nPop) ]
+    def create_pop(self):              # function to create population
+        self.id = [i for i in range(self.nPop)]                 # define IDs
+        self.states = [0 for i in range(self.nPop)]             # define states
+        self.latencyTime = [-1 for i in range(self.nPop)]       # define times exposed
+        self.infectiousTime = [-1 for i in range(self.nPop)]    # define times infectious
+        self.latencyLen = [-1 for i in range(self.nPop)]        # define latency lengths
+        self.infectiousLen = [-1 for i in range(self.nPop)]     # deifne infectious lengths
+        self.mixersAvi = [ [x for x in range(self.nPop) if x != i] for i in range(self.nPop) ]      # define vectors of available agents 
         self.infInit()
                   
 
-    def  infected(self, i):
+    def infected(self, i):             # function to infect agents at end of day and assign latency/infectious times
         self.states[i] = 1
         self.latencyTime[i] = ceil(np.random.lognormal(1.501524205, 0.07145896398))
         self.infectiousTime[i] = ceil(np.random.lognormal(2.064055712, 0.1754185243))
         self.latencyLen[i] = 0
 
-    def iteration(self):
-        new_inf = []
+    def iteration(self):            # function to simulate a day in the model
+        new_inf = []                # define list of new infections on day
         for i in range(self.nPop):
-            if self.states[i] == 2 and self.infectiousLen[i] == self.infectiousTime[i]:
+            if self.states[i] == 2 and self.infectiousLen[i] == self.infectiousTime[i]:         # move agents at end of infectious period to recovered
                 self.states[i] = 3
                 self.infectiousLen[i] = -1
-            if self.states[i] == 1 and self.latencyLen[i] == self.latencyTime[i]:
+            if self.states[i] == 1 and self.latencyLen[i] == self.latencyTime[i]:               # move agents at end of latency period to infectious
                 self.states[i] = 2
                 self.infectiousLen[i] = 0
                 self.latencyLen[i] = -1
-            meeting_no = np.random.poisson(self.meeting_ave)
-            meetings = np.random.choice(self.mixersAvi[i], meeting_no)
-            for j in range(len(meetings)):
+            meeting_no = np.random.poisson(self.meeting_ave)             # determine number of meetings for agent   
+            meetings = np.random.choice(self.mixersAvi[i], meeting_no)   # determine who agent meets
+            for j in range(len(meetings)):                               # meetings occur
                 if self.states[meetings[j]] == 2 and self.states[i] == 0:
-                    outcome = np.random.rand()
+                    outcome = np.random.rand()      # determines whether infection occurs
                     if outcome < self.TransmProb:
                         new_inf.append(i)
-            if self.states[i] == 1:
+            if self.states[i] == 1:         # update latency length
                 self.latencyLen[i] += 1
-            elif self.states[i] == 2:
+            elif self.states[i] == 2:       # update infectious length
                 self.infectiousLen[i] += 1
-        for k in new_inf:
+        for k in new_inf:           # update infections
             self.infected(k)
-        self.time += 1              
+        self.time += 1              # update time
 
-    def summary(self):
+    def summary(self):      # output summary data
         a = [self.states[x] for x in range(self.nPop) if self.states[x] == 0]
         b = [self.states[x] for x in range(self.nPop) if self.states[x] == 1]
         c = [self.states[x] for x in range(self.nPop) if self.states[x] == 2]
         d = [self.states[x] for x in range(self.nPop) if self.states[x] == 3]
         return [len(a), len(b), len(c), len(d)]
 
-    def run(self, n):
+    def run(self, n):       # run model for n days
         for i in range(n):
             self.iteration()
             sum = self.summary()
@@ -85,7 +85,8 @@ class abm:
             self.rec.append(sum[3])
             if i % 10 == 0:
                 print(self.summary())
-    
+
+# initial parameters
 nPop = 500
 inf0 = 1
 TransmProb = 0.016 
