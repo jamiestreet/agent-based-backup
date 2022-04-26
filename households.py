@@ -4,9 +4,9 @@ class households:
 
     def __init__(self,household_dist, ages, id):
         #household_type = ["singYA", "singA", "singOAP", "coupleYA", "coupleYA1C", "coupleYA2C", "coupleYA3C", "couple4YAC", "singPYA1C", "singPYA2C", "singPYA3C", "coupleA", "coupleA1C", "coupleA2C", "coupleA3C", "couple4AC", "singPA1C", "singPA2C", "singPA3C", "coupleA1YA", "coupleA2YA", "singPA1YA", "singPA2YA", "coupleOAP", "unrelYA"]
-        self.household_dist = household_dist
-        self.ages = ages
-        self.id = id
+        self.household_dist = household_dist        # define proportion distribution of households
+        self.ages = ages        # define ages
+        self.id = id            # define ids
         self.household_type = np.arange(len(household_dist))
 
     def household_sort(self):
